@@ -1,7 +1,7 @@
-FROM nginx:alpine
-# تغيير البورت لـ 8080 باش يقبله Cloud Run
-RUN sed -i 's/listen       80;/listen       8080;/g' /etc/nginx/conf.d/default.conf
-# وضع الـ UUID والمسار في صفحة بسيطة للتأكد
-RUN echo "Server is running with UUID: df137605-475a-408e-9013-33e595c6d837 on path: /@Radwan/@tech" > /usr/share/nginx/html/index.html
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+FROM alpine:latest
+RUN apk add --no-cache curl bash
+ENV UUID=df137605-475a-408e-9013-33e595c6d837
+ENV VM_PATH=/@Radwan/@tech
+ENV PORT=8080
+RUN curl -L -H "Cache-Control: no-cache" -o /xray.sh https://raw.githubusercontent.com/carltonf/gcloud-run-vless/main/xray.sh && chmod +x /xray.sh
+CMD ["/bin/bash", "/xray.sh"]
